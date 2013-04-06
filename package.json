@@ -1,0 +1,14 @@
+{
+      "name"        : "HeartoHelp.us"
+    , "description" : "HeartoHelp.us is a website that helps people vent to annonymous listeners"
+    , "version"     : "1.4.0"
+    , "author"      : "Subhadip Mitra<contact@subhadipmitra.com>"
+    , "keywords"    : ["HeartoHelp.us-chat","chat","cloud","mongodb","redis","socket-io"]
+    , "dependencies": {
+        "compassionpit-core"  : "0.1.1"
+      , "debug"             : "0.7.0"
+      , "step"              : "0.0.5"
+    }
+    , "main"        : "./app.js"
+    , "engines"     : { "node": ">= 0.6.2" }
+}
