@@ -1,0 +1,279 @@
+
+@chatHeight: 500px;
+
+/* Override some defaults */
+html, body {
+	background-color: #eee;
+}
+body {
+	padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
+
+	background-color: #222;
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAGklEQVQIW2NkYGD4D8SMQAwGcAY2AbBKDBUAVuYCBQPd34sAAAAASUVORK5CYII=);
+	background-repeat: repeat;
+
+	
+	color: #222;
+}
+
+.pagecontents{
+font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+font-size: 13px;
+font-weight: normal;
+line-height: 18px;
+background: none repeat scroll 0 0 #EEEEEE;
+}
+.container > footer p {
+	text-align: center; /* center align it with the container */
+}
+.container {
+	width: 940px; /* downsize our container to make the content feel a bit tighter and more cohesive. NOTE: this removes two full columns from the grid, meaning you only go to 14 columns and not 16. */
+color: rgb(64, 64, 64);
+}
+
+/* The white background content wrapper */
+.container > .content {
+	background-color: #fff;
+	padding: 20px;
+	margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+	border-radius: 0 0 6px 6px;
+	
+position: relative;
+background-color: rgb(255, 255, 255);
+box-shadow: 0px 3px 25px 1px rgba(0, 0, 0, 0.1);
+border-radius: 8px 8px 8px 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+min-height: 516px;
+}
+
+/* Page header tweaks */
+.page-header {
+  	background-color: #f5f5f5;
+  	padding: 20px 20px 10px;
+  	margin: 0px -20px 20px;
+-webkit-border-radius: 0px 0px 10px 10px;
+        border-radius: 0px 0px 10px 10px;
+}
+
+/* Give a quick and non-cross-browser friendly divider */
+.content .span4 {
+  	margin-left: 0;
+  	padding-left: 19px;
+  	border-left: 1px solid #eee;
+}
+
+.topbar .btn {
+  	border: 0;
+}
+
+.nickname {
+	color: #2288CA;
+}
+
+div#messagewell {
+    
+    height: 500px;
+    
+}
+div.mousescroll {
+    overflow: hidden;
+}
+div.mousescroll:hover {
+    overflow-y: scroll;
+}
+
+.slimScrollDiv { border: 1px solid #ccc; margin:10px; }
+
+
+
+
+
+.write-area {
+
+    -moz-appearance: none;
+    width: 100%;
+    display: block;
+    overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: hidden;
+    resize: none;
+    font-family: inherit;
+    font-style: inherit;
+    font-variant: inherit;
+    font-weight: inherit;
+    font-size-adjust: inherit;
+    font-stretch: inherit;
+    -moz-font-feature-settings: inherit;
+    -moz-font-language-override: inherit;
+    color: rgb(34, 34, 34);
+    padding: 10px 15px 10px 10px;
+        padding-top: 10px;
+        padding-right-value: 15px;
+        padding-bottom: 10px;
+        padding-left-value: 10px;
+        padding-left-ltr-source: physical;
+        padding-left-rtl-source: physical;
+        padding-right-ltr-source: physical;
+        padding-right-rtl-source: physical;
+    font-size: 20px;
+    line-height: 30px;
+    border-radius: 6px 6px 6px 6px;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
+        border-bottom-left-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+        border-top-width: 1px;
+        border-right-width-value: 1px;
+        border-right-width-ltr-source: physical;
+        border-right-width-rtl-source: physical;
+        border-bottom-width: 1px;
+        border-left-width-value: 1px;
+        border-left-width-ltr-source: physical;
+        border-left-width-rtl-source: physical;
+        border-top-style: solid;
+        border-right-style-value: solid;
+        border-right-style-ltr-source: physical;
+        border-right-style-rtl-source: physical;
+        border-bottom-style: solid;
+        border-left-style-value: solid;
+        border-left-style-ltr-source: physical;
+        border-left-style-rtl-source: physical;
+        border-top-color: rgba(0, 0, 0, 0.1);
+        border-right-color-value: rgba(0, 0, 0, 0.1);
+        border-right-color-ltr-source: physical;
+        border-right-color-rtl-source: physical;
+        border-bottom-color: rgba(0, 0, 0, 0.1);
+        border-left-color-value: rgba(0, 0, 0, 0.1);
+        border-left-color-ltr-source: physical;
+        border-left-color-rtl-source: physical;
+        -moz-border-top-colors: none;
+        -moz-border-right-colors: none;
+        -moz-border-bottom-colors: none;
+        -moz-border-left-colors: none;
+        border-image-source: none;
+        border-image-slice: 100% 100% 100% 100%;
+        border-image-width: 1 1 1 1;
+        border-image-outset: 0 0 0 0;
+        border-image-repeat: stretch stretch;
+    background-color: rgba(0, 0, 0, 0.06);
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.06) inset, 0px 1px 1px rgba(255, 255, 255, 0.2);
+    transition: background-color 0.1s linear 0s;
+        transition-property: background-color;
+        transition-duration: 0.1s;
+        transition-timing-function: linear;
+        transition-delay: 0s;
+
+}
+
+.userlist {
+	padding-left: 13px;
+}
+
+#upload-modal {
+    
+}
+
+#fileList {
+    height: 160px;
+    width: 525px;
+    overflow-y: scroll;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.fileitem {
+    margin: 9px 0 0 0;
+}
+
+.filenamefield {
+    text-size: 12px;
+    width: 320px;
+    padding-right: 10px;
+    overflow-x: hidden;
+}
+
+.fileprogressfield {
+    width: 110px;
+    top: 0px
+}
+
+.filestatusfield {
+    width: 70px;
+    text-align: center;
+}
+
+
+.meny {
+	display: none;
+	padding: 20px;
+	overflow: auto;
+	background: #333;
+	color: #eee;
+
+	-webkit-box-sizing: border-box;
+	   -moz-box-sizing: border-box;
+	        box-sizing: border-box;
+}
+	.meny ul {
+		margin-top: 10px;
+	}
+		.meny ul li {
+			
+		}
+			.meny ul li:before {
+				
+			}
+
+/**
+ * Hint graphic that appears while menu is inactive
+ */
+.meny-arrow {
+	position: absolute;
+	z-index: 10;
+
+	border: 10px solid transparent;
+
+	-webkit-transition: opacity 0.4s ease 0.4s;
+	   -moz-transition: opacity 0.4s ease 0.4s;
+	    -ms-transition: opacity 0.4s ease 0.4s;
+	     -o-transition: opacity 0.4s ease 0.4s;
+	        transition: opacity 0.4s ease 0.4s;
+}
+	.meny-left .meny-arrow {
+		left: 14px;
+		top: 50%;
+		margin-top: -16px;
+		border-left: 16px solid #333;
+	}
+	.meny-right .meny-arrow {
+		right: 14px;
+		top: 50%;
+		margin-top: -16px;
+		border-right: 16px solid #333;
+	}
+	.meny-top .meny-arrow {
+		left: 50%;
+		top: 14px;
+		margin-left: -16px;
+		border-top: 16px solid #333;
+	}
+	.meny-bottom .meny-arrow {
+		left: 50%;
+		bottom: 14px;
+		margin-left: -16px;
+		border-bottom: 16px solid #333;
+	}
+	.meny-active .meny-arrow {
+		opacity: 0;
+
+		-webkit-transition: opacity 0.2s ease;
+		   -moz-transition: opacity 0.2s ease;
+		    -ms-transition: opacity 0.2s ease;
+		     -o-transition: opacity 0.2s ease;
+		        transition: opacity 0.2s ease;
+	}
