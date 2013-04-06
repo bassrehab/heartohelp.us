@@ -5,7 +5,7 @@
     , "author"      : "Subhadip Mitra<contact@subhadipmitra.com>"
     , "keywords"    : ["HeartoHelp.us-chat","chat","cloud","mongodb","redis","socket-io"]
     , "dependencies": {
-        "compassionpit-core"  : "0.1.1"
+        "h2h-core"  : "0.1.1"
       , "debug"             : "0.7.0"
       , "step"              : "0.0.5"
     }
