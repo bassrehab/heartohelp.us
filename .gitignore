@@ -1,3 +1,2 @@
-node_modules
 .DS_Store
-nochan.json
+config.js
