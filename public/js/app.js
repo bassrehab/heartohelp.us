@@ -1,155 +1,17 @@
-
-$(document).ready(function() {
-    var align = [];
-    var lastmessage = 0;
-    var roompath = document.location.pathname;
-    var roomid = roompath.replace('/r/', '');
-    var nextmsgnum = 1;
-    
-    function datePrefix(dateObj) {
-        dateObj = dateObj || new Date();
-        return '<span class="msgdate">'+date('j M, g:i a', (dateObj.getTime()/1000))+'</span> ';
-    }
-    
-    var app = {
-
-        ROOMID          : roomid,
-        MAX_MSG_LEN     : 3000,
-        MAX_USR_LEN     : 50,
-        MAX_ROOMID_LEN  : 64,
-        msgCount        : 0,
-       
-        users           : [],
-        username        : 'Anonymous',
-
-        messageBox          : $('#message'),
-        nameBox             : $('#name'),
-        messagesBox         : $('#messages'),
-        usersBox            : $('#users'),
-        submitMessageButton : $('#submitMessageButton'),
-        renameButton        : $('#renameButton'),
-        target              : $('#target'),
-
-        
-        showWelcomeMessage: function() {
-            app.addMessageToUl("");
-            app.showSystemMessage({ body : "<li class='system'><p class='system'>Welcome to your Chat session.Reconnect anytime by visiting the Room URL above.All room messages are purged every 2 days<br />You are known as "+htmlentities(app.username)+".</p></li>"});
-        },
-        
-        addMessageToUl: function(msg) {
-            var preDiv = app.messagesBox.parent().get(0);
-            var atBottom = (preDiv.scrollHeight - preDiv.scrollTop) == preDiv.clientHeight;
-            app.messagesBox.append('<li class="message-block">'+msg+'</p></div></li>');
-            if(atBottom) {
-                preDiv.scrollTop = app.messagesBox.get(0).scrollHeight;
-                
-            }
-        },
-
-        showMessage: function(msg) {
-            var msgStr = datePrefix(msg.date);
-            var found = $.inArray(msg.username, align);
-            if (found < 0) {
-                 align.push(msg.username);
-             }
-            if (lastmessage !== msg.username || 0 || msg.username == 'system') {
-            
-                           if (msg.username == 'system') {
-                             msgStr += '<div class="system"><span class="system"><b>'+htmlentities(msg.username)+ '</b></span><p class="system">';
-                            }
-                          else {
-                             msgStr += '<div class="message-'+$.inArray(msg.username, align)+'"><span class="name-'+($.inArray(msg.username, align)%2)+'"><b>'+htmlentities(msg.username)+ '</b><a class="reportAbuseButton" target="_blank" href="' +msg.roomid+ '/report/' +msg.num+ '/"><img src="/static/images/user_ban.png" width="10px"></a></span><p class="msgbody-'+($.inArray(msg.username, align)%2)+'">';
-             
-
-              }
-             lastmessage = msg.username;
-            }     
-            else {
-             msgStr += '<div class="message-'+$.inArray(msg.username, align)+'"><p class="msgbody-'+($.inArray(msg.username, align)%2)+'">';
-            }
-             
-            msgStr += linkify(htmlentities(msg.body, 'ENT_NOQUOTES'));
-            app.addMessageToUl(msgStr);
-           
-        },
-
-        showSystemMessage: function(msg) {
-            lastmessage = msg.username;
-            app.addMessageToUl(datePrefix(msg.date) + '<b>Information</b> ' + msg.body);
-        },
-
-        setUsers: function(newusers) {
-            if(newusers.constructor === Array) {
-                app.users = newusers;
-                app.refreshUserList();
-            }
-        },
-
-        userJoined: function(newuser) {
-            if(newuser != null) {
-                app.users.push(newuser);
-                app.refreshUserList();
-                app.showSystemMessage({ body: "<li class='system'><p class='system'>"+newuser+" joined the room.</p></li>" });
-            }
-        },
-
-        userLeft: function(olduser) {
-            for(var i=0; i<app.users.length; i++) {
-                if(app.users[i] === olduser) {
-                    app.users.splice(i,1);
-                    break;
-                }
-            }
-            app.refreshUserList();
-            app.showSystemMessage({ body: "<li class='system'><p class='system'>"+olduser+" left the room.</p></li>" });
-        },
-
-        userRenamed: function(obj) {
-            var oldname = obj.oldname;
-            var newname = obj.newname;
-            for(var i=0; i<app.users.length; i++) {
-                if(app.users[i] === oldname) {
-                    app.users[i] = newname;
-                    break;
-                }
-            }
-            app.refreshUserList();
-            if(oldname == app.username) {
-                msg = "<li class='system'><p class='system'>You are now known as "+htmlentities(newname)+".</p></li>";
-                app.username = newname;
-                app.nameBox.val(newname);
-            } else {
-                msg = "<li class='system'><p class='system'>"+htmlentities(oldname)+" is now known as "+htmlentities(newname)+".</p></li>";
-            }
-            app.showSystemMessage({ body: msg });
-        },
-
-        refreshUserList: function() {
-            var allusers = app.users.slice(0);
-            allusers.sort(function(a,b){return a.toLowerCase() > b.toLowerCase()});
-            app.usersBox.empty();
-            $.each(allusers, function(i, usr) {
-                app.usersBox.append('<li class="useritem">' + htmlentities(usr) + '</li>');
-            });
-        }
-        
-    }
-
-    runChatClient(app);
+/*
+ * ChatApp :: Heartohelp.us LV Chat v1.1.1
+ * http://heartohelp.us
+ *
+ * Copyright 2012-13, Subhadip Mitra (punctuated)
+ * Licensed under the Apache 2.0 License.
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ * Date: Sun May 02, 2013
+ * contact@subhadipmitra.com
+ * contact@heartohelp.us
+ */
 
 
-    var meny = Meny.create({
-				
-	menuElement: document.querySelector( '.meny' ),
-	contentsElement: document.querySelector( '.pagecontents' ),
-	position: Meny.getQuery().p || 'left',
-	height: 200,
-	width: 260,
-	threshold: 40
-	});
 
-			
-	
-
-})
-
+function runChatClient(e){function n(t){if(t.date!=null){t.date=new Date(t.date)}if(t.body!=null){e.showMessage(t)}}function r(e){if(e&&e.constructor===Array){e.forEach(n)}}function i(e,t){e.keyup(function(e){var n=e.keyCode?e.keyCode:e.which;if(n==13){t()}}).keydown(function(e){var t=e.keyCode?e.keyCode:e.which;if(t==13){e.preventDefault()}})}function s(){var t=e.messageBox.val();if(t&&t!="\n"){if(t.length>e.MAX_MSG_LEN){t=t.substr(0,e.MAX_MSG_LEN)}u(t)}e.messageBox.val("")}function o(){var t=e.nameBox.val();t=t.replace(/\$|,|@|#|~|`|\%|\*|\^|\&|\(|\)|\+|\=|\[|\-|\ |\]|\[|\}|\{|\;|\:|\'|\"|\<|\>|\?|\||\\|\!|\$|\./g,"_");if(t&&t!=e.username){a(t)}}function u(e){t.emit("message",e)}function a(n){if(n){if(n>e.MAX_USR_LEN)n=n.substr(0,e.MAX_USR_LEN);t.emit("change name",n,function(t,r){if(t){alert(t)}else{e.userRenamed({oldname:e.username,newname:n})}})}}var t=io.connect("/chat");t.on("new message",n);t.on("new messages",r);t.on("ready",e.showWelcomeMessage);t.on("users",e.setUsers);t.on("user joined",e.userJoined);t.on("user left",e.userLeft);t.on("user renamed",e.userRenamed);t.on("user typing",e.userTyping);t.on("connect",function(){t.emit("join room",e.ROOMID,e.msgCount,function(t,n){if(t)console.log(t);e.username=n})});e.submitMessageButton.click(s);e.renameButton.click(o);i(e.messageBox,s);i(e.nameBox,o);e.delMsgsButton.click(function(){t.emit("deleteMessages")});e.messageBox.keypress(function(n){t.emit("isTyping",e.username)})}$(document).ready(function(){function o(e){e=e||new Date;return'<span class="msgdate">'+date("j M, g:i a",e.getTime()/1e3)+"</span> "}var e=[];var t=0;var n=document.location.pathname;var r=n.replace("/r/","");var i=1;var s;var u={ROOMID:r,MAX_MSG_LEN:3e3,MAX_USR_LEN:50,MAX_ROOMID_LEN:64,msgCount:0,focus:true,unread:0,users:[],username:"Anonymous",messageBox:$("#message"),nameBox:$("#name"),messagesBox:$("#messages"),usersBox:$("#users"),submitMessageButton:$("#submitMessageButton"),renameButton:$("#renameButton"),delMsgsButton:$("#delMsgsButton"),showWelcomeMessage:function(){u.addMessageToUl("");u.showSystemMessage({body:"<li class='system'><p class='system'>Welcome to your Chat session. Begin by introducing yourself or wait for a Partner to join in. Reconnect with this chat room anytime by re-visiting this <a href='http://heartohelp.us/r/"+htmlentities(u.ROOMID)+"'>Room URL</a>.<br /> For Support email us at support@heartohelp.us<br />You are known as <b>'"+htmlentities(u.username)+"'</b>.</p></li>"})},addMessageToUl:function(e){var t=u.messagesBox.parent().get(0);var n=t.scrollHeight-t.scrollTop;u.messagesBox.append('<li class="message-block">'+e+"</p></div></li>");if(n){t.scrollTop=u.messagesBox.get(0).scrollHeight}if(!u.focus){u.unread++}u.playNotificationSound();u.updateTitle()},showMessage:function(n){var r=o(n.date);var i=$.inArray(n.username,e);if(i<0){e.push(n.username)}if(t!==n.username||0||n.username=="system"){if(n.username=="system"){r+='<div class="system"><span class="system"><b>'+htmlentities(n.username)+'</b></span><p class="system">'}if(n.body=="-- deleted message --"){r+='<div class="message-'+$.inArray(n.username,e)+'"><span id="username" class="name-'+$.inArray(n.username,e)%2+'"><b>'+htmlentities(n.username)+'</b><a class="reportAbuseButton" target="_blank" href="'+n.roomid+"/report/"+n.num+'/"><img src="/static/images/spacer.png"></a></span><p class="deletedMessage">'}else{r+='<div class="message-'+$.inArray(n.username,e)+'"><span id="username" class="name-'+$.inArray(n.username,e)%2+'"><b>'+htmlentities(n.username)+'</b><a class="reportAbuseButton" target="_blank" href="'+n.roomid+"/report/"+n.num+'/"><img src="/static/images/spacer.png"></a></span><p class="msgbody-'+$.inArray(n.username,e)%2+'">'}t=n.username}else{if(n.body=="-- deleted message --"){r+='<div class="message-'+$.inArray(n.username,e)+'"><span id="username" class="name-'+$.inArray(n.username,e)%2+'"><b>'+htmlentities(n.username)+'</b><a class="reportAbuseButton" target="_blank" href="'+n.roomid+"/report/"+n.num+'/"><img src="/static/images/spacer.png"></a></span><p class="deletedMessage">'}else{r+='<div class="message-'+$.inArray(n.username,e)+'"><p class="msgbody-'+$.inArray(n.username,e)%2+'">'}}r+=linkify(htmlentities(n.body,"ENT_NOQUOTES"));u.addMessageToUl(r)},showSystemMessage:function(e){t=e.username;u.addMessageToUl(o(e.date)+"<b>Information</b> "+e.body)},setUsers:function(e){if(e.constructor===Array){u.users=e;u.refreshUserList()}},userJoined:function(e){if(e!=null){u.users.push(e);u.refreshUserList();u.showSystemMessage({body:"<li class='system'><p class='system'>"+e+" joined the room.</p></li>"});u.playNotificationSound()}},userLeft:function(e){for(var t=0;t<u.users.length;t++){if(u.users[t]===e){u.users.splice(t,1);break}}u.refreshUserList();u.showSystemMessage({body:"<li class='system'><p class='system'>"+e+" left the room.</p></li>"});u.playNotificationSound()},userTyping:function(e){clearTimeout(s);$("#"+htmlentities(e)).show();s=setTimeout(function(){$("#"+htmlentities(e)).hide()},2e3)},userRenamed:function(e){var t=e.oldname;var n=e.newname;for(var r=0;r<u.users.length;r++){if(u.users[r]===t){u.users[r]=n;break}}u.refreshUserList();if(t==u.username){msg="<li class='system'><p class='system'>You are now known as<b> "+htmlentities(n)+"</b>.</p></li>";u.username=n;u.nameBox.val(n)}else{msg="<li class='system'><p class='system'>"+htmlentities(t)+" is now known as "+htmlentities(n)+".</p></li>"}u.showSystemMessage({body:msg})},refreshUserList:function(){var e=u.users.slice(0);e.sort(function(e,t){return e.toLowerCase()>t.toLowerCase()});u.usersBox.empty();$.each(e,function(e,t){u.usersBox.append('<li class="useritem"><img id='+htmlentities(t)+' src="/static/images/typing.gif" class="typing" style="display:none;">'+htmlentities(t)+"</li>")})},playNotificationSound:function(){if($("#slideThree").is(":checked")){document.getElementById("chat-notification-sound").play()}},updateTitle:function(){if(u.unread){document.title="("+u.unread.toString()+") HeartoHelp LV Chat"}else{document.title="HeartoHelp LV Chat"}}};runChatClient(u);var a=Meny.create({menuElement:document.querySelector(".meny"),contentsElement:document.querySelector(".pagecontents"),position:Meny.getQuery().p||"left",height:200,width:260,threshold:40});$("a.invite").click(function(){$("div.share").slideToggle()});$("span.copyurl").empty().html($(location).attr("href"));$(window).bind("blur",function(){u.focus=false;u.updateTitle()});$(window).bind("focus",function(){u.focus=true;u.unread=0;u.updateTitle()})})
+function readableSize(c){if(c==null){return"unknown"}var a=["B","KB","MB","GB","TB","PB","EB","ZB","YB"];var b=0;while(c>=1024){c/=1024;++b}return c.toFixed(1)+" "+a[b]}function linkify(e){var b,d,c,a;d=/(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;replacedText=e.replace(d,'<a href="$1" target="_blank">$1</a>');c=/(^|[^\/])(www\.[\S]+(\b|$))/gim;replacedText=replacedText.replace(c,'$1<a href="http://$2" target="_blank">$2</a>');return replacedText}function htmlentities(b,f,e,a){var d=this.get_html_translation_table("HTML_ENTITIES",f),c="";b=b==null?"":b+"";if(!d){return false}if(f&&f==="ENT_QUOTES"){d["'"]="&#039;"}if(!!a||a==null){for(c in d){if(d.hasOwnProperty(c)){b=b.split(c).join(d[c])}}}else{b=b.replace(/([\s\S]*?)(&(?:#\d+|#x[\da-f]+|[a-zA-Z][\da-z]*);|$)/g,function(i,h,g){for(c in d){if(d.hasOwnProperty(c)){h=h.split(c).join(d[c])}}return h+g})}return b}function get_html_translation_table(h,f){var c={},e={},b;var d={},a={};var i={},g={};d[0]="HTML_SPECIALCHARS";d[1]="HTML_ENTITIES";a[0]="ENT_NOQUOTES";a[2]="ENT_COMPAT";a[3]="ENT_QUOTES";i=!isNaN(h)?d[h]:h?h.toUpperCase():"HTML_SPECIALCHARS";g=!isNaN(f)?a[f]:f?f.toUpperCase():"ENT_COMPAT";if(i!=="HTML_SPECIALCHARS"&&i!=="HTML_ENTITIES"){throw new Error("Table: "+i+" not supported")}c["38"]="&amp;";if(i==="HTML_ENTITIES"){c["160"]="&nbsp;";c["161"]="&iexcl;";c["162"]="&cent;";c["163"]="&pound;";c["164"]="&curren;";c["165"]="&yen;";c["166"]="&brvbar;";c["167"]="&sect;";c["168"]="&uml;";c["169"]="&copy;";c["170"]="&ordf;";c["171"]="&laquo;";c["172"]="&not;";c["173"]="&shy;";c["174"]="&reg;";c["175"]="&macr;";c["176"]="&deg;";c["177"]="&plusmn;";c["178"]="&sup2;";c["179"]="&sup3;";c["180"]="&acute;";c["181"]="&micro;";c["182"]="&para;";c["183"]="&middot;";c["184"]="&cedil;";c["185"]="&sup1;";c["186"]="&ordm;";c["187"]="&raquo;";c["188"]="&frac14;";c["189"]="&frac12;";c["190"]="&frac34;";c["191"]="&iquest;";c["192"]="&Agrave;";c["193"]="&Aacute;";c["194"]="&Acirc;";c["195"]="&Atilde;";c["196"]="&Auml;";c["197"]="&Aring;";c["198"]="&AElig;";c["199"]="&Ccedil;";c["200"]="&Egrave;";c["201"]="&Eacute;";c["202"]="&Ecirc;";c["203"]="&Euml;";c["204"]="&Igrave;";c["205"]="&Iacute;";c["206"]="&Icirc;";c["207"]="&Iuml;";c["208"]="&ETH;";c["209"]="&Ntilde;";c["210"]="&Ograve;";c["211"]="&Oacute;";c["212"]="&Ocirc;";c["213"]="&Otilde;";c["214"]="&Ouml;";c["215"]="&times;";c["216"]="&Oslash;";c["217"]="&Ugrave;";c["218"]="&Uacute;";c["219"]="&Ucirc;";c["220"]="&Uuml;";c["221"]="&Yacute;";c["222"]="&THORN;";c["223"]="&szlig;";c["224"]="&agrave;";c["225"]="&aacute;";c["226"]="&acirc;";c["227"]="&atilde;";c["228"]="&auml;";c["229"]="&aring;";c["230"]="&aelig;";c["231"]="&ccedil;";c["232"]="&egrave;";c["233"]="&eacute;";c["234"]="&ecirc;";c["235"]="&euml;";c["236"]="&igrave;";c["237"]="&iacute;";c["238"]="&icirc;";c["239"]="&iuml;";c["240"]="&eth;";c["241"]="&ntilde;";c["242"]="&ograve;";c["243"]="&oacute;";c["244"]="&ocirc;";c["245"]="&otilde;";c["246"]="&ouml;";c["247"]="&divide;";c["248"]="&oslash;";c["249"]="&ugrave;";c["250"]="&uacute;";c["251"]="&ucirc;";c["252"]="&uuml;";c["253"]="&yacute;";c["254"]="&thorn;";c["255"]="&yuml;"}if(g!=="ENT_NOQUOTES"){c["34"]="&quot;"}if(g==="ENT_QUOTES"){c["39"]="&#39;"}c["60"]="&lt;";c["62"]="&gt;";for(b in c){if(c.hasOwnProperty(b)){e[String.fromCharCode(b)]=c[b]}}return e}function trim(e,d){var b,a=0,c=0;e+="";if(!d){b=" \n\r\t\f\x0B\u00a0\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u200b\u2028\u2029\u3000"}else{d+="";b=d.replace(/([\[\]\(\)\.\?\/\*\{\}\+\$\^\:])/g,"$1")}a=e.length;for(c=0;c<a;c++){if(b.indexOf(e.charAt(c))===-1){e=e.substring(c);break}}a=e.length;for(c=a-1;c>=0;c--){if(b.indexOf(e.charAt(c))===-1){e=e.substring(0,c+1);break}}return b.indexOf(e.charAt(0))===-1?e:""}function date(j,h){var g=this,i,e,b=/\\?([a-z])/gi,a,c=function(k,f){if((k=k+"").length<f){return(new Array(++f-k.length)).join("0")+k}return k},d=["Sun","Mon","Tues","Wednes","Thurs","Fri","Satur","January","February","March","April","May","June","July","August","September","October","November","December"];a=function(f,k){return e[f]?e[f]():k};e={d:function(){return c(e.j(),2)},D:function(){return e.l().slice(0,3)},j:function(){return i.getDate()},l:function(){return d[e.w()]+"day"},N:function(){return e.w()||7},S:function(){var f=e.j();return f<4|f>20&&["st","nd","rd"][f%10-1]||"th"},w:function(){return i.getDay()},z:function(){var k=new Date(e.Y(),e.n()-1,e.j()),f=new Date(e.Y(),0,1);return Math.round((k-f)/86400000)+1},W:function(){var k=new Date(e.Y(),e.n()-1,e.j()-e.N()+3),f=new Date(k.getFullYear(),0,4);return c(1+Math.round((k-f)/86400000/7),2)},F:function(){return d[6+e.n()]},m:function(){return c(e.n(),2)},M:function(){return e.F().slice(0,3)},n:function(){return i.getMonth()+1},t:function(){return(new Date(e.Y(),e.n(),0)).getDate()},L:function(){var f=e.Y();return f%4==0&f%100!=0|f%400==0},o:function(){var l=e.n(),f=e.W(),k=e.Y();return k+(l===12&&f<9?1:l===1&&f>9?-1:0)},Y:function(){return i.getFullYear()},y:function(){return(e.Y()+"").slice(-2)},a:function(){return i.getHours()>11?"pm":"am"},A:function(){return e.a().toUpperCase()},B:function(){var k=i.getUTCHours()*3600,f=i.getUTCMinutes()*60,l=i.getUTCSeconds();return c(Math.floor((k+f+l+3600)/86.4)%1000,3)},g:function(){return e.G()%12||12},G:function(){return i.getHours()},h:function(){return c(e.g(),2)},H:function(){return c(e.G(),2)},i:function(){return c(i.getMinutes(),2)},s:function(){return c(i.getSeconds(),2)},u:function(){return c(i.getMilliseconds()*1000,6)},e:function(){throw"Not supported (see source code of date() for timezone on how to add support)"},I:function(){var k=new Date(e.Y(),0),m=Date.UTC(e.Y(),0),f=new Date(e.Y(),6),l=Date.UTC(e.Y(),6);return 0+(k-m!==f-l)},O:function(){var k=i.getTimezoneOffset(),f=Math.abs(k);return(k>0?"-":"+")+c(Math.floor(f/60)*100+f%60,4)},P:function(){var f=e.O();return f.substr(0,3)+":"+f.substr(3,2)},T:function(){return"UTC"},Z:function(){return -i.getTimezoneOffset()*60},c:function(){return"Y-m-d\\TH:i:sP".replace(b,a)},r:function(){return"D, d M Y H:i:s O".replace(b,a)},U:function(){return i/1000|0}};this.date=function(k,f){g=this;i=f==null?new Date:f instanceof Date?new Date(f):new Date(f*1000);return k.replace(b,a)};return this.date(j,h)};
