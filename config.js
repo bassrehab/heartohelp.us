@@ -7,7 +7,7 @@ nconf.argv().env();
 nconf.file({ file: 'config.json' });
 nconf.defaults({
     'http': {
-        'port': 1337
+        //'port': unset
     }
 });
 
